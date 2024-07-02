@@ -32,6 +32,13 @@
 
             @include sm {
                 justify-content: flex-start;
+
+                p{
+                    font-size: 12px;
+                    line-height: 1.3rem;
+                }
+
+
             }
 
             .title {
@@ -39,6 +46,10 @@
 
                 @include lg {
                     font-size: 48px;
+                }
+
+                @include sm{
+                    font-size: 20px;
                 }
             }
 
