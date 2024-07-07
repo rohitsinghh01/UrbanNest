@@ -6,6 +6,8 @@ import postRoute from './routes/postRoute.js';
 import userRoute from './routes/userRoute.js';
 import chatRoute from './routes/chatRoute.js';
 import messageRoute from './routes/messageRoute.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
