@@ -15,6 +15,10 @@ export const getChats = async (req, res) => {
     for (const chat of chats) {
       const receiverId = chat.userIDs.find((id) => id !== tokenUserId);
 
+      if (!receiverId) {
+        continue; 
+      }
+
       const receiver = await prisma.user.findUnique({
         where: {
           id: receiverId,
@@ -25,8 +29,15 @@ export const getChats = async (req, res) => {
           avatar: true,
         },
       });
+
+      if (!receiver) {
+        continue; 
+      }
+
       chat.receiver = receiver;
     }
+
+    // console.log('in get chats controller', chats);
 
     res.status(200).json(chats);
   } catch (err) {
@@ -72,17 +83,50 @@ export const getChat = async (req, res) => {
   }
 };
 
+// export const addChat = async (req,res)=>{
+//     const tokenUserId = req.userId
+//     try {
+//         const newChat = await prisma.chat.create({
+//             data:{
+//                 userIDs:[tokenUserId,req.body.receiverId]
+//             }
+//         })
+//         res.status(200).json(newChat);
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({message:"Failed to add chats!"})
+//     }
+// }
+
 export const addChat = async (req, res) => {
   const tokenUserId = req.userId;
+  const receiverId = req.body.receiverId;
+
   try {
-    const newChat = await prisma.chat.create({
-      data: {
-        userIDs: [tokenUserId, req.body.receiverId],
+    // Check if there's an existing chat with both receiverId and tokenUserId
+    const existingChat = await prisma.chat.findFirst({
+      where: {
+        AND: [
+          { userIDs: { has: tokenUserId } },
+          { userIDs: { has: receiverId } },
+        ],
       },
     });
-    res.status(200).json(newChat);
-  } catch (err) {
-    console.log(err);
+
+    if (existingChat) {
+      // If an existing chat is found, return it
+      res.status(200).json(existingChat);
+    } else {
+      // If no existing chat is found, create a new one
+      const newChat = await prisma.chat.create({
+        data: {
+          userIDs: [tokenUserId, receiverId],
+        },
+      });
+      res.status(200).json(newChat);
+    }
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Failed to add chat!' });
   }
 };
@@ -104,9 +148,10 @@ export const readChat = async (req, res) => {
         },
       },
     });
+
     res.status(200).json(chat);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: 'Failed to read chat!' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to read chats!' });
   }
 };

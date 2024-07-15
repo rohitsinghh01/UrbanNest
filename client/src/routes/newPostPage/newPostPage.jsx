@@ -10,11 +10,13 @@ function NewPostPage() {
   const [value, setValue] = useState('');
   const [images, setImages] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData);
 
@@ -47,7 +49,9 @@ function NewPostPage() {
       navigate('/' + res.data.id);
     } catch (err) {
       console.log(err);
-      setError(error);
+      setError('Failed to submit the form. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,7 +115,6 @@ function NewPostPage() {
                 <option value='land'>Land</option>
               </select>
             </div>
-
             <div className='item'>
               <label htmlFor='utilities'>Utilities Policy</label>
               <select name='utilities'>
@@ -141,19 +144,21 @@ function NewPostPage() {
               <input min={0} id='size' name='size' type='number' />
             </div>
             <div className='item'>
-              <label htmlFor='school'>School</label>
+              <label htmlFor='school'>School distance</label>
               <input min={0} id='school' name='school' type='number' />
             </div>
             <div className='item'>
-              <label htmlFor='bus'>bus</label>
-              <input min={0} id='bus' name='Bus' type='number' />
+              <label htmlFor='bus'>Bus stop distance</label>
+              <input min={0} id='bus' name='bus' type='number' />
             </div>
             <div className='item'>
-              <label htmlFor='restaurant'>Restaurant</label>
+              <label htmlFor='restaurant'>Restaurant distance</label>
               <input min={0} id='restaurant' name='restaurant' type='number' />
             </div>
-            <button className='sendButton'>Add</button>
-            {error && <span>error</span>}
+            <button className='sendButton' disabled={loading}>
+              {loading ? 'Submitting...' : 'Add'}
+            </button>
+            {error && <span>{error}</span>}
           </form>
         </div>
       </div>

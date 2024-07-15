@@ -3,29 +3,54 @@ import Slider from '../../components/slider/Slider';
 import Map from '../../components/map/Map';
 import { useNavigate, useLoaderData } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import apiRequest from '../../lib/apiRequest';
+import apiRequest from '../../lib/apiRequest'; // Assuming this is your axios or fetch wrapper
 
 function SinglePage() {
   const post = useLoaderData();
-  const [saved, setSaved] = useState(post.isSaved);
+  const [saved, setSaved] = useState(post.isSaved); // Initialize saved state
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setSaved(post.isSaved); // Update saved state when post changes
+  }, [post]);
 
   const handleSave = async () => {
     if (!currentUser) {
       navigate('/login');
+      return; // Stop execution if user is not logged in
     }
-  
-    setSaved((prev) => !prev);
+
     try {
-      await apiRequest.post('/users/save', { postId: post.id });
+      if (saved) {
+        // Unsave the post if already saved
+        await apiRequest.delete(`/users/save/${post.id}`);
+        setSaved(false); // Update local state to reflect the unsave
+      } else {
+        // Save the post if not saved
+        await apiRequest.post('/users/save', { postId: post.id });
+        setSaved(true); // Update local state to reflect the save
+      }
     } catch (err) {
       console.log(err);
-      setSaved((prev) => !prev);
     }
   };
+
+   const handelSendMessage = async () => {
+     try {
+       await apiRequest.post('/chats', { receiverId: post.userId });
+       navigate('/profile');
+     } catch (error) {
+       console.log(error);
+     }
+   };
+
+   const handleShowDirection = () => {
+     const url = `https://www.google.com/maps?q=${post.latitude},${post.longitude}`;
+     window.open(url, '_blank');
+   };
 
   return (
     <div className='singlePage'>
@@ -139,10 +164,11 @@ function SinglePage() {
             <Map items={[post]} />
           </div>
           <div className='buttons'>
-            <button>
+            <button onClick={handelSendMessage}>
               <img src='/chat.png' alt='' />
               Send a Message
             </button>
+            <button onClick={handleShowDirection}> Show Direction</button>
             <button
               onClick={handleSave}
               style={{

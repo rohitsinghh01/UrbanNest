@@ -112,6 +112,7 @@ export const savePost = async (req, res) => {
   }
 };
 
+
 export const profilePosts = async (req, res) => {
   const tokenUserId = req.userId;
   try {
