@@ -1,0 +1,114 @@
+
+@import "../../responsive.scss";
+
+.aboutPage {
+    display: flex;
+    height: 100%;
+    color: whitesmoke;
+    .about-signature {
+            text-align: right;
+            font-style: italic;
+            color: #D5A187;
+        }
+
+    .textContainer {
+        flex: 3;
+
+        .wrapper {
+            padding-right: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            height: 100%;
+
+            p {
+                line-height: 1.5rem;
+                font-size: 16px;
+
+            }
+
+            @include lg {
+                padding-right: 50px;
+            }
+
+            @include md {
+                padding: 0;
+            }
+
+            @include sm {
+                justify-content: flex-start;
+
+                p {
+                    font-size: 12px;
+                    line-height: 1.3rem;
+                }
+
+
+            }
+
+            .title {
+                font-size: 48px;
+                color: #CF7650;
+
+                @include lg {
+                    font-size: 48px;
+                }
+
+                @include sm {
+                    font-size: 20px;
+                }
+            }
+
+            .boxes {
+                display: flex;
+                justify-content: space-between;
+
+                .boxColor {
+                    color: #CF7650;
+                    font-weight: bold;
+                }
+
+                @include sm {
+                    display: none;
+                }
+
+                h1 {
+                    font-size: 36px;
+
+                    @include lg {
+                        font-size: 32px;
+                    }
+                }
+
+                h2 {
+                    font-size: 20px;
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+
+    .imgContainer {
+        flex: 2;
+        background-color: #fcf5f3;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        @include md {
+            display: none;
+        }
+
+        img {
+            width: 100%;
+            position: absolute;
+            right: 0;
+            height: 100%;
+
+            @include lg {
+                width: 105%;
+            }
+        }
+    }
+}

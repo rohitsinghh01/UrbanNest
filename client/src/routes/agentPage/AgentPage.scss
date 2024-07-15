@@ -1,0 +1,160 @@
+// .agents-container {
+//     padding: 20px;
+//     max-width: 800px;
+//     margin: 0 auto;
+// }
+
+// .agents-title {
+//     text-align: center;
+//     margin-bottom: 20px;
+//     color: #cf7650;
+// }
+
+
+
+@import "../../responsive.scss";
+
+.agentPage {
+    display: flex;
+    height: 100%;
+    color: #cf7650;
+
+    .textContainer {
+        flex: 3;
+
+        .wrapper {
+            padding-right: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 50px;
+            height: 100%;
+
+            .agents-list {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 20px;
+                }
+            
+                .agent-card {
+                    padding: 15px;
+                    border: 1px solid #ccc;
+                    border-radius: 8px;
+                    background-color: #f9f9f9;
+                }
+            
+                .agent-name {
+                    margin-bottom: 10px;
+                    font-size: 18px;
+                    color: #cf7650
+                }
+            
+                .agent-info {
+                    font-size: 14px;
+                    margin-bottom: 5px;
+                }
+            
+                .agent-info a {
+                    color: #007bff;
+                    text-decoration: none;
+                }
+            
+                .agent-info a:hover {
+                    text-decoration: underline;
+                }
+
+            p {
+                line-height: 1.5rem;
+                font-size: 18px;
+                color: whitesmoke;
+
+            }
+            .boxes{
+                p{
+                    color: #CF7650;
+                }
+            }
+
+            @include lg {
+                padding-right: 50px;
+            }
+
+            @include md {
+                padding: 0;
+            }
+
+            @include sm {
+                justify-content: flex-start;
+
+                p {
+                    font-size: 12px;
+                    line-height: 1.3rem;
+                }
+
+
+            }
+
+            .title {
+                font-size: 48px;
+
+                @include lg {
+                    font-size: 48px;
+                }
+
+                @include sm {
+                    font-size: 20px;
+                }
+            }
+
+            .boxes {
+                display: flex;
+                justify-content: space-between;
+
+                .boxColor {
+                    color: #CF7650;
+                    font-weight: bold;
+                }
+
+                @include sm {
+                    display: none;
+                }
+
+                h1 {
+                    font-size: 36px;
+
+                    @include lg {
+                        font-size: 32px;
+                    }
+                }
+
+                h2 {
+                    font-size: 20px;
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+
+    .imgContainer {
+        flex: 2;
+        background-color: #fcf5f3;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        @include md {
+            display: none;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            right: 0;
+
+            @include lg {
+                width: 105%;
+            }
+        }
+    }
+}
