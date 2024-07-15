@@ -14,7 +14,7 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const { currentUser } = useContext(AuthContext);
   useEffect(() => {
-    setSocket(io('http://localhost:8000'));
+    setSocket(io(import.meta.env.VITE_SOCKET_DOMAIN));
   }, []);
 
   useEffect(() => {
