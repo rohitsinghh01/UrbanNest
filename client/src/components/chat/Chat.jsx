@@ -4,6 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../lib/apiRequest';
 import { format } from 'timeago.js';
 import { SocketContext } from '../../context/SocketContext';
+import { useNotificationStore } from '../../lib/notificationStore';
 
 function Chat({ chats }) {
   // console.log('chatssss', chats);
@@ -19,6 +20,9 @@ function Chat({ chats }) {
   const handleOpenChat = async (id, receiver) => {
     try {
       const res = await apiRequest('/chats/' + id);
+      if (!res.data.seenBy.includes(currentUser.id)) {
+        decrease();
+      }
       setChat({ ...res.data, receiver });
     } catch (error) {
       console.log(error);
@@ -79,13 +83,7 @@ function Chat({ chats }) {
             }}
             onClick={() => handleOpenChat(c.id, c.receiver)}
           >
-            <img
-              src={
-                c.receiver.avatar ||
-                'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-              }
-              alt=''
-            />
+            <img src={c.receiver.avatar || 'noavatar.jpg'} alt='' />
             <span>{c.receiver.username}</span>
             <p>{c.lastMessage}</p>
           </div>
@@ -95,13 +93,7 @@ function Chat({ chats }) {
         <div className='chatBox'>
           <div className='top'>
             <div className='user'>
-              <img
-                src={
-                  chat.receiver.avatar ||
-                  'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-                }
-                alt=''
-              />
+              <img src={chat.receiver.avatar || 'noavatar.jpg'} alt='' />
               {chat.receiver.username}
             </div>
             <span className='close' onClick={() => setChat(null)}>
@@ -118,9 +110,7 @@ function Chat({ chats }) {
                       ? 'flex-end'
                       : 'flex-start',
                   textAlign:
-                    message.userId === currentUser.id
-                      ? 'right'
-                      : 'left',
+                    message.userId === currentUser.id ? 'right' : 'left',
                 }}
                 key={message.id}
               >
